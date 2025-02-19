@@ -1,39 +1,107 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# encryption_interceptor
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/tools/pub/writing-package-pages).
+`encryption_interceptor` is a Dio interceptor that automatically **encrypts outgoing requests** and **decrypts incoming responses** using AES encryption. This ensures secure communication between the client and the server, even without HTTPS.
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/to/develop-packages).
--->
+## 🚀 Features
+✅ **AES Encryption (256-bit)** – Protects request and response data  
+✅ **Automatic Request Encryption** – Encrypts request bodies before sending  
+✅ **Automatic Response Decryption** – Decrypts responses before passing to the app  
+✅ **Optional GET Request Encryption** – Choose whether to encrypt GET requests  
+✅ **Skip Encryption for Specific Requests** – Use a custom header (`skip-encryption`)  
+✅ **Lightweight & Easy to Use** – Plug-and-play with **Dio**
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+---
 
-## Features
+## 📦 Installation
+Add the package to your `pubspec.yaml`:
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
-
-## Getting started
-
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
-
-## Usage
-
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
-
-```dart
-const like = 'sample';
+```yaml
+dependencies:
+  encryption_interceptor: ^1.0.0
 ```
 
-## Additional information
+Or install via CLI:
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+```sh
+flutter pub add encryption_interceptor
+```
+
+---
+
+## 🔧 Usage
+
+### **1️⃣ Add the Interceptor to Dio**
+```dart
+import 'package:dio/dio.dart';
+import 'package:encryption_interceptor/encryption_interceptor.dart';
+
+void main() {
+  final dio = Dio();
+
+  // Add the interceptor with encryption enabled for all requests
+  dio.interceptors.add(EncryptionInterceptor("my_super_secret_key"));
+
+  // Making an encrypted request
+  dio.post("https://api.example.com/login", data: {
+    "username": "test",
+    "password": "securepassword"
+  });
+}
+```
+
+---
+
+### **2️⃣ Enabling GET Request Encryption**
+By default, GET requests are **not encrypted** because they typically don’t have a body.  
+If your API requires encrypted GET requests, enable it:
+
+```dart
+dio.interceptors.add(EncryptionInterceptor("my_secret_key", enableGetEncryption: true));
+```
+
+---
+
+### **3️⃣ Skipping Encryption for Specific Requests**
+If you need to send a plain request without encryption, use the `"skip-encryption"` header:
+
+```dart
+dio.post(
+  "https://api.example.com/data",
+  data: {"public_info": "This should not be encrypted"},
+  options: Options(headers: {"skip-encryption": true}),
+);
+```
+
+---
+
+## 🛠 How It Works
+1️⃣ **Before Sending a Request**
+- The request body is encrypted using **AES 256-bit encryption**
+- The encrypted data is sent as:
+  ```json
+  {
+    "payload": "ENCRYPTED_DATA_HERE"
+  }
+  ```
+
+2️⃣ **When Receiving a Response**
+- The interceptor **automatically decrypts** the response body
+- The decrypted JSON is **returned to the app in its original format**
+
+---
+
+## 🛡 Security Notes
+- **AES encryption ensures high-level security**, but it is always recommended to use **HTTPS** alongside it.
+- **Do not expose the secret key** in your frontend applications.
+- **Ensure your server can decrypt AES-encoded data** before implementing this interceptor.
+
+---
+
+## 📜 License
+This package is released under the MIT License.
+
+---
+
+## 💬 Need Help?
+For any issues or feature requests, feel free to open an issue on GitHub.
+
