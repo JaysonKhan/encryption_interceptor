@@ -20,12 +20,14 @@ import 'aes_helper.dart';
 class EncryptionInterceptor extends Interceptor {
   final String secretKey;
   final AESHelper _aesHelper;
-  final bool enableGetEncryption; // Enables GET request encryption (default: false)
+  final bool
+      enableGetEncryption; // Enables GET request encryption (default: false)
 
   /// **Constructor**
   /// - `secretKey`: AES encryption key
   /// - `enableGetEncryption`: If true, encrypts GET requests (default: false)
-  EncryptionInterceptor(this.secretKey, {this.enableGetEncryption = false}) : _aesHelper = AESHelper(secretKey);
+  EncryptionInterceptor(this.secretKey, {this.enableGetEncryption = false})
+      : _aesHelper = AESHelper(secretKey);
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
@@ -37,7 +39,8 @@ class EncryptionInterceptor extends Interceptor {
 
     // Check if encryption should be skipped via header
     if (options.headers["skip-encryption"] == true) {
-      options.headers.remove("skip-encryption"); // Remove header after processing
+      options.headers
+          .remove("skip-encryption"); // Remove header after processing
       super.onRequest(options, handler);
       return;
     }

@@ -12,10 +12,7 @@ void main() async {
     // Sending an encrypted POST request
     Response response = await dio.post(
       "https://api.example.com/login",
-      data: {
-        "username": "test_user",
-        "password": "securepassword"
-      },
+      data: {"username": "test_user", "password": "securepassword"},
     );
 
     print("Decrypted Response: ${response.data}");
