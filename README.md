@@ -1,4 +1,4 @@
-# encryption_interceptor
+# EncryptionInterceptor
 
 `encryption_interceptor` is a Dio interceptor that automatically **encrypts outgoing requests** and **decrypts incoming responses** using AES encryption. This ensures secure communication between the client and the server, even without HTTPS.
 
@@ -94,14 +94,4 @@ dio.post(
 - **AES encryption ensures high-level security**, but it is always recommended to use **HTTPS** alongside it.
 - **Do not expose the secret key** in your frontend applications.
 - **Ensure your server can decrypt AES-encoded data** before implementing this interceptor.
-
----
-
-## 📜 License
-This package is released under the MIT License.
-
----
-
-## 💬 Need Help?
-For any issues or feature requests, feel free to open an issue on GitHub.
 
