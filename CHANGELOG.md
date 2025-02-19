@@ -1,6 +1,3 @@
-
----
-
 ## **📌 CHANGELOG.md**
 ```md
 # Changelog
